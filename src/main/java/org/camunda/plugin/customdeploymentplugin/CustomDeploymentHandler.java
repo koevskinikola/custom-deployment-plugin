@@ -55,13 +55,13 @@ public class CustomDeploymentHandler implements DeploymentHandler {
 
       Process process = model.getDefinitions().getChildElementsByType(Process.class)
                              .iterator().next();
-      Boolean result = process.getId().contains("713");
+      Boolean result = process.getCamundaVersionTag().contains("713");
 
       if (result) {
         this.processId = process.getId();
       }
 
-      return result;
+      return !result;
     }
 
     return true;

@@ -25,7 +25,11 @@ import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import org.camunda.bpm.engine.repository.Deployment;
+import org.camunda.bpm.engine.repository.Resource;
 import org.camunda.bpm.engine.test.ProcessEngineRule;
+import org.camunda.bpm.model.bpmn.Bpmn;
+import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -65,4 +69,38 @@ public class CustomDeploymentPluginTest {
                        .containsOnlyOnce(CustomDeploymentPlugin.class);
   }
 
+
+  @Test
+  public void testDeployment() {
+    // given
+    BpmnModelInstance process712 = Bpmn.createExecutableProcess("process")
+        .camundaVersionTag("process712")
+        .startEvent("start")
+        .endEvent("end")
+        .done();
+
+    BpmnModelInstance process713 = Bpmn.createExecutableProcess("process")
+       .camundaVersionTag("process713")
+       .startEvent("start")
+       .endEvent("end")
+       .done();
+
+    Deployment deployment712 = processEngine.getRepositoryService().createDeployment()
+       .enableDuplicateFiltering(true)
+       .name("test")
+       .addModelInstance("process.bpmn", process712)
+       .deploy();
+
+    // when
+    Deployment deployment713 = processEngine.getRepositoryService().createDeployment()
+        .enableDuplicateFiltering(true)
+        .name("test")
+        .addModelInstance("process.bpmn", process713)
+        .deploy();
+
+    // then
+    List<Resource> resources = processEngine.getRepositoryService()
+        .getDeploymentResources(deployment713.getId());
+    assertThat(deployment713.getId()).isEqualTo(deployment712.getId());
+  }
 }
