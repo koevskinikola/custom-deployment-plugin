@@ -1,0 +1,3 @@
+org/camunda/plugin/customdeploymentplugin/CustomDeploymentHandler.class
+org/camunda/plugin/customdeploymentplugin/CustomDeploymentHandlerFactory.class
+org/camunda/plugin/customdeploymentplugin/CustomDeploymentPlugin.class
