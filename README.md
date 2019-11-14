@@ -8,7 +8,8 @@ See https://docs.camunda.org/manual/develop/user-guide/process-engine/process-en
 For JBoss/WildFly:
 
 1. Build the plugin
-2. Copy the generated artifact to `$WILDFLY_HOME/modules/org/camunda/bpm/camunda-engine-plugin-wildflyclassloader/main`
+2. Copy the generated artifact to `$WILDFLY_HOME/modules/org/camunda/plugin/custom-deployment-plugin
+/main`
 3. Create a `module.xml` file in the same directory with the following contents (adjust versions if necessary):
 
 ```xml
