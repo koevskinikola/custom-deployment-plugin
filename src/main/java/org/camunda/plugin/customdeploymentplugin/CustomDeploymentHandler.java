@@ -55,7 +55,7 @@ public class CustomDeploymentHandler implements DeploymentHandler {
 
       Process process = model.getDefinitions().getChildElementsByType(Process.class)
                              .iterator().next();
-      Boolean result = process.getId().contains("712");
+      Boolean result = process.getId().contains("713");
 
       if (result) {
         this.processId = process.getId();
@@ -69,13 +69,22 @@ public class CustomDeploymentHandler implements DeploymentHandler {
 
   @Override
   public String determineDuplicateDeployment(CandidateDeployment candidateDeployment) {
+    Deployment deployment = repositoryService.createDeploymentQuery()
+                                             .deploymentNameLike("713")
+                                             .orderByDeploymentTime()
+                                             .desc()
+                                             .singleResult();
 
-    return repositoryService.createDeploymentQuery()
-                                           .deploymentNameLike("712")
-                                           .orderByDeploymentTime()
-                                           .desc()
-                                           .singleResult()
-                                           .getId();
+    if (deployment != null) {
+      return deployment.getId();
+    } else {
+      return repositoryService.createDeploymentQuery()
+          .deploymentName(candidateDeployment.getName())
+          .orderByDeploymentTime()
+          .desc()
+          .singleResult()
+          .getId();
+    }
   }
 
   @Override
@@ -89,7 +98,7 @@ public class CustomDeploymentHandler implements DeploymentHandler {
     for (ProcessDefinition processDefinition : processDefinitions) {
       // If all the resources are new, the candidateVersionTag
       // property will be null since there's nothing to compare it to.
-      if (processId.equals(processDefinition.getId())) {
+      if (processId != null && !processId.equals(processDefinition.getId())) {
         deploymentIds.add(processDefinition.getDeploymentId());
       }
     }
@@ -115,7 +124,7 @@ public class CustomDeploymentHandler implements DeploymentHandler {
         // only deploy Deployments of the same name that contain a Process Definition with the
         // correct Camunda Version Tag. If all the resources are new, the candidateVersionTag
         // property will be null since there's nothing to compare it to.
-        if (processId.equals(processDefinition.getId())) {
+        if (processId != null && !processId.equals(processDefinition.getId())) {
           deploymentIds.add(deployment.getId());
           break;
         }

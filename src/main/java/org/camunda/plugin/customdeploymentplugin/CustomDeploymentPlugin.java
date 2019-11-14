@@ -24,5 +24,6 @@ public class CustomDeploymentPlugin extends AbstractProcessEnginePlugin {
   @Override
   public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
     super.preInit(processEngineConfiguration);
+    processEngineConfiguration.setDeploymentHandlerFactory(new CustomDeploymentHandlerFactory());
   }
 }
