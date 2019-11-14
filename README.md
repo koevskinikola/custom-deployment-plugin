@@ -1,7 +1,8 @@
 # custom-deployment-plugin
 A Camunda Process Engine Plugin for testing the customizable resource deployment feature of
 version 7.12. The customized deployment process will not deploy BPMN resources with a `713` in
-their Process Definition Key (i.e. Process ID). 
+their Camunda Version Tag (a resource with the same name needs to already exist from a previous
+deployment). 
 
 ## How to install it
 
